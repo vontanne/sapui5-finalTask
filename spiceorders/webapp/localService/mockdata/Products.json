@@ -1,0 +1,7 @@
+[
+  { "ProductID": "RAW_SPICE", "Name": "Raw Spice", "Unit": "ton", "UnitPrice": "1000.00" },
+  { "ProductID": "REFINED_MELANGE", "Name": "Refined Melange", "Unit": "ton", "UnitPrice": "2500.00" },
+  { "ProductID": "SPICE_ESSENCE", "Name": "Spice Essence", "Unit": "ton", "UnitPrice": "5000.00" },
+  { "ProductID": "SPICE_COFFEE", "Name": "Spice Coffee", "Unit": "sack", "UnitPrice": "400.00" },
+  { "ProductID": "SPICE_BEER", "Name": "Spice Beer", "Unit": "liter", "UnitPrice": "300.00" }
+]

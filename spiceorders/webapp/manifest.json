@@ -14,6 +14,16 @@
       "id": "@sap/generator-fiori:basic",
       "version": "1.34.0",
       "toolsId": "f06e7c55-d11c-4d8d-9734-27f93de476b3"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/V2/SpiceOrders/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0",
+          "localUri": "localService/metadata.xml"
+        }
+      }
     }
   },
   "sap.ui": {
@@ -51,6 +61,13 @@
         "settings": {
           "bundleName": "choam.spiceorders.i18n.i18n"
         }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "defaultBindingMode": "TwoWay"
+        }
       }
     },
     "resources": {
@@ -76,9 +93,7 @@
         {
           "name": "RouteMain",
           "pattern": ":?query:",
-          "target": [
-            "TargetMain"
-          ]
+          "target": ["TargetMain"]
         }
       ],
       "targets": {

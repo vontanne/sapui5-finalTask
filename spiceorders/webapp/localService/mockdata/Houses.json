@@ -1,0 +1,8 @@
+[
+  { "HouseID": "ATREIDES", "Name": "House Atreides", "Leader": "Duke Leto Atreides", "Homeworld": "Caladan" },
+  { "HouseID": "HARKONNEN", "Name": "House Harkonnen", "Leader": "Baron Vladimir Harkonnen", "Homeworld": "Giedi Prime" },
+  { "HouseID": "CORRINO", "Name": "House Corrino", "Leader": "Padishah Emperor Shaddam IV", "Homeworld": "Kaitain" },
+  { "HouseID": "VERNIUS", "Name": "House Vernius", "Leader": "Earl Dominic Vernius", "Homeworld": "Ix" },
+  { "HouseID": "RICHESE", "Name": "House Richese", "Leader": "Count Ilban Richese", "Homeworld": "Richese" },
+  { "HouseID": "ECAZ", "Name": "House Ecaz", "Leader": "Archduke Armand Ecaz", "Homeworld": "Ecaz" }
+]
