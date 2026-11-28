@@ -12,18 +12,51 @@
             <List
                 id="orderList"
                 noDataText="{i18n>orderListNoData}"
+                growing="true"
+                growingScrollToLoad="true"
                 updateFinished=".onUpdateFinished"
                 items="{
                     path: '/Orders',
-                    parameters: { expand: 'Customer' },
+                    parameters: { expand: 'Customer', countMode: 'Inline' },
                     sorter: { path: 'OrderID', descending: true }
                 }">
+                <infoToolbar>
+                    <Toolbar
+                        id="orderListInfoToolbar"
+                        active="true"
+                        visible="{mainView>/isFiltered}"
+                        press=".onOpenViewSettings">
+                        <Text id="orderListFilterInfo" text="{mainView>/filterInfo}" />
+                    </Toolbar>
+                </infoToolbar>
                 <headerToolbar>
                     <OverflowToolbar id="orderListToolbar">
                         <SearchField
                             id="orderSearchField"
                             placeholder="{i18n>orderSearchPlaceholder}"
-                            search=".onSearch" />
+                            search=".onSearch">
+                            <layoutData>
+                                <OverflowToolbarLayoutData
+                                    id="orderSearchFieldLayoutData"
+                                    minWidth="150px"
+                                    maxWidth="240px"
+                                    shrinkable="true"
+                                    priority="NeverOverflow" />
+                            </layoutData>
+                        </SearchField>
+                        <ToolbarSpacer id="orderListToolbarSpacer" />
+                        <Button
+                            id="orderFilterButton"
+                            icon="sap-icon://filter"
+                            type="Transparent"
+                            tooltip="{i18n>orderFilterButtonTooltip}"
+                            press=".onOpenViewSettings" />
+                        <Button
+                            id="orderGroupButton"
+                            icon="sap-icon://group-2"
+                            type="Transparent"
+                            tooltip="{i18n>orderGroupButtonTooltip}"
+                            press=".onOpenViewSettings" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <ObjectListItem

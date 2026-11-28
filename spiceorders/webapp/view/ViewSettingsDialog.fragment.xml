@@ -1,0 +1,26 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <ViewSettingsDialog
+        id="viewSettingsDialog"
+        confirm=".onConfirmViewSettings">
+        <filterItems>
+            <ViewSettingsFilterItem
+                id="statusFilterItem"
+                key="Status"
+                text="{i18n>statusFilterTitle}"
+                multiSelect="true">
+                <items>
+                    <ViewSettingsItem id="statusFilterNew" key="NEW" text="{i18n>statusNew}" />
+                    <ViewSettingsItem id="statusFilterInTransit" key="IN_TRANSIT" text="{i18n>statusInTransit}" />
+                    <ViewSettingsItem id="statusFilterDelivered" key="DELIVERED" text="{i18n>statusDelivered}" />
+                    <ViewSettingsItem id="statusFilterCancelled" key="CANCELLED" text="{i18n>statusCancelled}" />
+                </items>
+            </ViewSettingsFilterItem>
+        </filterItems>
+        <groupItems>
+            <ViewSettingsItem id="groupByCustomer" key="Customer/Name" text="{i18n>groupByCustomer}" />
+            <ViewSettingsItem id="groupByStatus" key="Status" text="{i18n>groupByStatus}" />
+        </groupItems>
+    </ViewSettingsDialog>
+</core:FragmentDefinition>

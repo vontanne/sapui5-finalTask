@@ -5,9 +5,18 @@ sap.ui.define(
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/ui/model/FilterType",
+    "sap/ui/model/Sorter",
     "choam/spiceorders/model/formatter"
   ],
-  (Controller, JSONModel, Filter, FilterOperator, FilterType, formatter) => {
+  (
+    Controller,
+    JSONModel,
+    Filter,
+    FilterOperator,
+    FilterType,
+    Sorter,
+    formatter
+  ) => {
     "use strict";
 
     return Controller.extend("choam.spiceorders.controller.Main", {
@@ -16,7 +25,10 @@ sap.ui.define(
       onInit() {
         const router = this.getOwnerComponent().getRouter();
 
-        this.getView().setModel(new JSONModel({ title: "" }), "mainView");
+        this.getView().setModel(
+          new JSONModel({ title: "", filterInfo: "", isFiltered: false }),
+          "mainView"
+        );
 
         router
           .getRoute("RouteMain")
@@ -40,7 +52,8 @@ sap.ui.define(
       onSearch(event) {
         const query = event.getParameter("query").trim();
         const isOrderNumber = /^\d{1,9}$/.test(query);
-        const filters = [];
+
+        this._searchFilter = null;
 
         if (query) {
           const searchFilters = [
@@ -62,12 +75,119 @@ sap.ui.define(
             );
           }
 
-          filters.push(new Filter({ filters: searchFilters, and: false }));
+          this._searchFilter = new Filter({
+            filters: searchFilters,
+            and: false
+          });
         }
+
+        this._applyFilters();
+      },
+
+      onConfirmViewSettings(event) {
+        const statusItems = event.getParameter("filterItems");
+        const resourceBundle = this.getOwnerComponent()
+          .getModel("i18n")
+          .getResourceBundle();
+        const mainViewModel = this.getView().getModel("mainView");
+        const statusFilters = statusItems.map(
+          (statusItem) =>
+            new Filter({
+              path: "Status",
+              operator: FilterOperator.EQ,
+              value1: statusItem.getKey()
+            })
+        );
+        const statusTexts = statusItems.map((statusItem) =>
+          statusItem.getText()
+        );
+        const isFiltered = statusFilters.length > 0;
+
+        this._statusFilter = isFiltered
+          ? new Filter({ filters: statusFilters, and: false })
+          : null;
+
+        mainViewModel.setProperty("/isFiltered", isFiltered);
+        mainViewModel.setProperty(
+          "/filterInfo",
+          isFiltered
+            ? resourceBundle.getText("orderListFilteredBy", [
+                statusTexts.join(", ")
+              ])
+            : ""
+        );
+
+        this._applyFilters();
+        this._applyGrouping(
+          event.getParameter("groupItem"),
+          event.getParameter("groupDescending")
+        );
+      },
+
+      async onOpenViewSettings(event) {
+        const isGroupButton =
+          event.getSource() === this.byId("orderGroupButton");
+        const dialogPage = isGroupButton ? "group" : "filter";
+
+        if (!this._viewSettingsDialogLoading) {
+          this._viewSettingsDialogLoading = this.loadFragment({
+            name: "choam.spiceorders.view.ViewSettingsDialog"
+          });
+        }
+
+        const dialog = await this._viewSettingsDialogLoading;
+
+        dialog.open(dialogPage);
+      },
+
+      _applyFilters() {
+        const activeFilters = [];
+
+        if (this._searchFilter) {
+          activeFilters.push(this._searchFilter);
+        }
+
+        if (this._statusFilter) {
+          activeFilters.push(this._statusFilter);
+        }
+
+        const filters = activeFilters.length
+          ? [new Filter({ filters: activeFilters, and: true })]
+          : [];
 
         this.byId("orderList")
           .getBinding("items")
           .filter(filters, FilterType.Application);
+      },
+
+      _applyGrouping(groupItem, isDescending) {
+        const sorters = [];
+
+        if (groupItem) {
+          const groupPath = groupItem.getKey();
+          const isStatusGroup = groupPath === "Status";
+
+          sorters.push(
+            new Sorter({
+              path: groupPath,
+              descending: isDescending,
+              group: isStatusGroup ? this._getStatusGroup.bind(this) : true
+            })
+          );
+        }
+
+        sorters.push(new Sorter({ path: "OrderID", descending: true }));
+
+        this.byId("orderList").getBinding("items").sort(sorters);
+      },
+
+      _getStatusGroup(context) {
+        const status = context.getProperty("Status");
+
+        return {
+          key: status,
+          text: formatter.statusText.call(this, status)
+        };
       },
 
       _onMainMatched() {
