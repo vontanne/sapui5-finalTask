@@ -48,7 +48,8 @@
       "minUI5Version": "1.154.0",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.f": {}
       }
     },
     "contentDensities": {
@@ -79,9 +80,9 @@
     },
     "routing": {
       "config": {
-        "routerClass": "sap.m.routing.Router",
-        "controlAggregation": "pages",
-        "controlId": "app",
+        "routerClass": "sap.f.routing.Router",
+        "controlAggregation": "beginColumnPages",
+        "controlId": "layout",
         "transition": "slide",
         "type": "View",
         "viewType": "XML",
@@ -94,12 +95,22 @@
           "name": "RouteMain",
           "pattern": ":?query:",
           "target": ["TargetMain"]
+        },
+        {
+          "name": "RouteOrder",
+          "pattern": "Orders/{orderId}",
+          "target": ["TargetMain", "TargetOrder"]
         }
       ],
       "targets": {
         "TargetMain": {
           "id": "Main",
           "name": "Main"
+        },
+        "TargetOrder": {
+          "id": "Order",
+          "name": "Order",
+          "controlAggregation": "midColumnPages"
         }
       }
     },

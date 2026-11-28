@@ -1,0 +1,6 @@
+<mvc:View controllerName="choam.spiceorders.controller.Order"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="orderPage" title="{i18n>orderTitle} {OrderID}">
+    </Page>
+</mvc:View>
