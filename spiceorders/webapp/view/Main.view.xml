@@ -11,12 +11,21 @@
         <semantic:content>
             <List
                 id="orderList"
+                noDataText="{i18n>orderListNoData}"
                 updateFinished=".onUpdateFinished"
                 items="{
                     path: '/Orders',
                     parameters: { expand: 'Customer' },
                     sorter: { path: 'OrderID', descending: true }
                 }">
+                <headerToolbar>
+                    <OverflowToolbar id="orderListToolbar">
+                        <SearchField
+                            id="orderSearchField"
+                            placeholder="{i18n>orderSearchPlaceholder}"
+                            search=".onSearch" />
+                    </OverflowToolbar>
+                </headerToolbar>
                 <ObjectListItem
                     id="orderListItem"
                     title="{i18n>orderTitle} {OrderID}"
