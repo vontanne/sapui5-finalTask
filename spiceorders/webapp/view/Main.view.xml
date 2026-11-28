@@ -1,6 +1,38 @@
 <mvc:View controllerName="choam.spiceorders.controller.Main"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-    </Page>
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:semantic="sap.f.semantic"
+    core:require="{ Decimal: 'sap/ui/model/odata/type/Decimal' }">
+    <semantic:SemanticPage id="orderListPage">
+        <semantic:titleHeading>
+            <Title id="orderListTitle" text="{mainView>/title}" />
+        </semantic:titleHeading>
+        <semantic:content>
+            <List
+                id="orderList"
+                updateFinished=".onUpdateFinished"
+                items="{
+                    path: '/Orders',
+                    parameters: { expand: 'Customer' },
+                    sorter: { path: 'OrderID', descending: true }
+                }">
+                <ObjectListItem
+                    id="orderListItem"
+                    title="{i18n>orderTitle} {OrderID}"
+                    number="{ path: 'Total', type: 'Decimal', constraints: { precision: 15, scale: 2 } }"
+                    numberUnit="{i18n>currency}">
+                    <attributes>
+                        <ObjectAttribute id="orderListItemCustomer" text="{Customer/Name}" />
+                    </attributes>
+                    <firstStatus>
+                        <ObjectStatus
+                            id="orderListItemStatus"
+                            text="{ path: 'Status', formatter: '.formatter.statusText' }"
+                            state="{ path: 'Status', formatter: '.formatter.statusState' }" />
+                    </firstStatus>
+                </ObjectListItem>
+            </List>
+        </semantic:content>
+    </semantic:SemanticPage>
 </mvc:View>
